@@ -1,6 +1,6 @@
-## 🔐 Authentication
+# 🔐 Authentication
 
-### Register Doctor
+## 1. Register Doctor (Public)
 
 ```http
 POST /auth/register/doctor
@@ -12,6 +12,7 @@ POST /auth/register/doctor
 {
   "username": "string",
   "password": "string",
+  "confirmPassword": "string",
   "specialization": "string"
 }
 ```
@@ -24,10 +25,34 @@ POST /auth/register/doctor
 }
 ```
 
-### Register User
+## 2. Register User (Public)
 
 ```http
 POST /auth/register/user
+```
+
+**Request Body**
+
+```json
+{
+  "username": "string",
+  "password": "string",
+  "confirmPassword": "string"
+}
+```
+
+**Response Body**
+
+```json
+{
+  "message": "Register user Successfully"
+}
+```
+
+## 3. Login Doctor (Public)
+
+```http
+POST /auth/login/doctor
 ```
 
 **Request Body**
@@ -43,14 +68,17 @@ POST /auth/register/user
 
 ```json
 {
-  "message": "Register user Successfully"
+  "id": 1,
+  "username": "username",
+  "specialization": "string",
+  "accessToken": "token"
 }
 ```
 
-### Login (Doctor/User)
+## 4. Login User (Public)
 
 ```http
-POST /auth/login
+POST /auth/login/user
 ```
 
 **Request Body**
@@ -58,8 +86,7 @@ POST /auth/login
 ```json
 {
   "username": "string",
-  "password": "string",
-  "role": "doctor" | "user"
+  "password": "string"
 }
 ```
 
@@ -67,17 +94,15 @@ POST /auth/login
 
 ```json
 {
-    "id" : 1,
-    "username" : "username",
-    "role" : "doctor" | "user",
-    "accessToken" : "token"
-
+  "id": 1,
+  "username": "username",
+  "accessToken": "token"
 }
 ```
 
-## 👤 User Management
+# 👤 User Management
 
-### Get User Profile
+## 5. Get User Profile (User)
 
 ```http
 GET /users/me
@@ -92,7 +117,7 @@ GET /users/me
 }
 ```
 
-### Update User Profile
+## 6. Update User Profile (User)
 
 ```http
 PATCH /users/me
@@ -111,15 +136,14 @@ PATCH /users/me
 
 ```json
 {
-    "id" : 1,
-    "username" : "username",
-    "role" : "doctor"| "user"
+  "id": 1,
+  "username": "username"
 }
 ```
 
-## 👨‍⚕️ Doctor Management
+# 👨‍⚕️ Doctor Management
 
-### Get Doctor Profile
+## 7. Get Doctor Profile (Doctor)
 
 ```http
 GET /doctors/me
@@ -135,6 +159,8 @@ GET /doctors/me
 }
 ```
 
+## 8. Update Doctor Profile (Doctor)
+
 ```http
 PATCH /doctors/me
 ```
@@ -144,7 +170,8 @@ PATCH /doctors/me
 ```json
 {
   "username": "string",
-  "password": "string"
+  "password": "string",
+  "specialization": "string"
 }
 ```
 
@@ -152,15 +179,15 @@ PATCH /doctors/me
 
 ```json
 {
-    "id" : 1,
-    "username" : "username",
-    "role" : "doctor"| "user"
+  "id": 1,
+  "username": "username",
+  "specialization": "string"
 }
 ```
 
-## 📊 Health Records
+# 📊 Health Records
 
-### Create Health Record
+## 9. Create Health Record (User)
 
 ```http
 POST /health-records
@@ -183,7 +210,9 @@ POST /health-records
 }
 ```
 
-### Get User's Health Records
+## 10. Get User's Health Records (User)
+
+💡**Important:** This Endpoint for get all Health Records of own
 
 ```http
 GET /health-records
@@ -191,7 +220,6 @@ GET /health-records
 
 **Query Parameters**
 
-- `type`: กรองตามประเภท
 - `from`: วันที่เริ่มต้น (YYYY-MM-DD)
 - `to`: วันที่สิ้นสุด (YYYY-MM-DD)
 
@@ -209,15 +237,11 @@ GET /health-records
 ]
 ```
 
+## 11. Get User's Health Records By id (User)
+
 ```http
 GET /health-records/:id
 ```
-
-**Query Parameters**
-
-- `type`: กรองตามประเภท
-- `from`: วันที่เริ่มต้น (YYYY-MM-DD)
-- `to`: วันที่สิ้นสุด (YYYY-MM-DD)
 
 **Response Body**
 
@@ -230,6 +254,8 @@ GET /health-records/:id
   "date": "date"
 }
 ```
+
+## 12. Update User's Health Records (User)
 
 ```http
 PATCH /health-records/:id
@@ -256,6 +282,8 @@ PATCH /health-records/:id
 }
 ```
 
+## 13. Delete User's Health Records (User)
+
 ```http
 DELETE /health-records/:id
 ```
@@ -266,9 +294,9 @@ DELETE /health-records/:id
 {}
 ```
 
-## 📝 Doctor Notes
+# 📝 Doctor Notes
 
-### Create Note
+## 14. Create Note (Doctor)
 
 ```http
 POST /doctor-notes
@@ -291,7 +319,9 @@ POST /doctor-notes
 }
 ```
 
-### Get Notes (Doctor)
+## 15. Get Notes (Doctor)
+
+💡**Important:** This Endpoint for doctor to get all Note of own
 
 ```http
 GET /doctor-notes/my-notes
@@ -311,7 +341,9 @@ GET /doctor-notes/my-notes
 ]
 ```
 
-### Get Notes For Patient (Doctor)
+## 16. Get Notes For Patient (Doctor)
+
+💡**Important:** This Endpoint for doctor to get all Note of specific user
 
 ```http
 GET /doctor-notes/user/:userId
@@ -331,7 +363,9 @@ GET /doctor-notes/user/:userId
 ]
 ```
 
-### Get Received Notes (User)
+## 17. Get Received Notes (User)
+
+💡**Important:** This Endpoint for user to get all Note of own
 
 ```http
 GET /doctor-notes/received
@@ -350,6 +384,8 @@ GET /doctor-notes/received
   }
 ]
 ```
+
+## 18. Update Notes For Patient (Doctor)
 
 ```http
 PATCH /doctor-notes/:id
@@ -374,6 +410,8 @@ PATCH /doctor-notes/:id
   "createdAt": "Date Time"
 }
 ```
+
+## 19. Delete Notes For Patient (Doctor)
 
 ```http
 DELETE /doctor-notes/:id
